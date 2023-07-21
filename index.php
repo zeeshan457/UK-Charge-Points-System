@@ -188,116 +188,47 @@
 <h5 class = "text-center">Users can plot the charge points on this interactive map</h5> <br>
     <div id="map" style="width:100%;height:500px;"></div>
 
-    <?php
-    /**
-     *
-     * PHP method return values for lat and long.
-     *
-     */
+<!--    --><?php
+//    /**
+//     *
+//     * PHP method return values for lat and long.
+//     *
+//     */
+//
+//    $latitude = array();
+//    $longitude = array();
+//    $name = array();
+//    $town = array();
+//    $county = array();
+//    $chargeDeviceStatus = array();
+//
+//    try {
+//            $client = new MongoDB\Driver\Manager('mongodb://localhost:27017');
+//            $query = new MongoDB\Driver\Query([]);
+//            $rows = $client->executeQuery("mydb.charge_points", $query);
+//
+//            foreach($rows as $row) {
+//                // convert from stdClass to an array that can be displayed.
+//                $document = json_decode(json_encode($row),true);
+//
+//                $latitude[] = $document['latitude'];
+//                $longitude[] = $document['longitude'];
+//                $name[] = $document['name'];
+//                $town[] = $document['town'];
+//                $county[] = $document['county'];
+//                $chargeDeviceStatus[] = $document['chargeDeviceStatus'];
+//            }
+//
+//        } catch (\MongoDB\Driver\Exception\Exception $e) {
+//            echo 'Mongodb error';
+//        }
+//
+//    ?>
 
-    $latitude = array();
-    $longitude = array();
-    $name = array();
-    $town = array();
-    $county = array();
-    $chargeDeviceStatus = array();
-
-    try {
-            $client = new MongoDB\Driver\Manager('mongodb://localhost:27017');
-            $query = new MongoDB\Driver\Query([]);
-            $rows = $client->executeQuery("mydb.charge_points", $query);
-
-            foreach($rows as $row) {
-                // convert from stdClass to an array that can be displayed.
-                $document = json_decode(json_encode($row),true);
-
-                $latitude = array('latitude' => $document['latitude']);
-                $longitude = array('longitude' => $document['longitude']);
-                $name = array('name' => $document['name']);
-                $town = array('town' => $document['town']);
-                $county = array('county' => $document['county']);
-                $chargeDeviceStatus = array('chargeDeviceStatus' => $document['chargeDeviceStatus']);
-            }
-
-        } catch (\MongoDB\Driver\Exception\Exception $e) {
-            echo 'Mongodb error';
-        }
-
-    ?>
-    <script>
-        /**
-         *
-         * Global Attributes needed for initialization
-         *
-         * Assign php arrays to JS arrays
-         *
-         */
-        var map;
-        var latitude = <?php echo json_encode($latitude);?>;
-        var longitude = <?php echo json_encode($longitude);?>;
-        var name = <?php echo json_encode($name);?>;
-        var town = <?php echo json_encode($town);?>;
-        var county = <?php echo json_encode($county);?>;
-        var chargeDeviceStatus = <?php echo json_encode($chargeDeviceStatus);?>;
-
-
-        /**
-         *
-         * Initialising with JS, google map, and passing API key below.
-         *
-         * then sets default marker for UK
-         *
-         * @param callback passing callback
-         */
-        function myMap(callback) {
-            var mapProp= {
-                center:new google.maps.LatLng(53.466056292346444, -2.1445376733893284),
-                zoom:6,
-                mapTypeId: google.maps.MapTypeId.HYBRID,
-
-
-            };
-            map = new google.maps.Map(document.getElementById("map"),mapProp);
-
-        }
-
-
-
-
-        /**
-         *
-         * Sets markers on Google map, will be called on button onClick()
-         *
-         * The markers will be looped based on the fetched data from Mongodb
-         *
-         */
-        function addMarker() {
-            // variables for assigning
-            let lat = latitude.latitude;
-            let long = [longitude.longitude];
-            let name1 = name.name;
-            let town1 = town.town;
-            let county1 = county.county;
-            let status1 = chargeDeviceStatus.status;
-
-            marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(lat, long),
-                    map: map,
-                });
-
-                var infowindow = new google.maps.InfoWindow({
-                    content: 'Name: ' + name1 + "<br /br>" + 'Latitude: ' + lat + "<br /br>" + 'Longitude: ' + long
-                        + "<br /br>" + 'Town: ' + town1 + "<br /br>" + 'County: ' + county1 + "<br /br>" + 'Status: ' + status1
-                });
-
-                infowindow.open(map, marker);
-        }
-
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXjkxMVhaSd81MCLH1uOaiBfz_ed4Fr50&callback=myMap"></script> <br>
-
-    <button type="button" onclick="addMarker()" class="btn btn-danger btn-block">Plot map</button>
-    <button type="submit" name="submitRefresh" class="btn btn-primary btn-block">Refresh table</button>
+<!--    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOQCuXjuSLJ5wiL-HdTG8mVNgH0aa6Ovc&callback=myMap"></script> <br>-->
+<!---->
+<!--    <button type="button" onclick="addMarkers(latitude, longitude, name, town, county, chargeDeviceStatus)" class="btn btn-danger btn-block">Plot map</button>-->
+<!--    <button type="submit" name="submitRefresh" class="btn btn-primary btn-block">Refresh table</button>-->
     </div>
 </form> <br>
 <!--  Defining table headers  -->
@@ -314,7 +245,7 @@
         <th>ChargeDeviceStatus</th>
     </tr>
 
-<?PHP
+<?php
     /******************************************************************************************************************
      *
      * connect to mongodb database and collection.
@@ -322,6 +253,13 @@
      * getting variables with POST method
      *
      *****************************************************************************************************************/
+
+    $latitude = array();
+    $longitude = array();
+    $name = array();
+    $town = array();
+    $county = array();
+    $chargeDeviceStatus = array();
 
     try {
         $client = new MongoDB\Driver\Manager('mongodb://localhost:27017');
@@ -683,6 +621,13 @@
                 // convert from stdClass to an array that can be displayed.
                 $document = json_decode(json_encode($row),true);
 
+                $latitude[] = $document['latitude'];
+                $longitude[] = $document['longitude'];
+                $name[] = $document['name'];
+                $town[] = $document['town'];
+                $county[] = $document['county'];
+                $chargeDeviceStatus[] = $document['chargeDeviceStatus'];
+
                 echo "<tr>";
                 echo "<td>" . $document['chargeDeviceID'] . "</td>";
                 echo "<td>" . $document['name'] . "</td>";
@@ -714,5 +659,83 @@
     }
 ?>
 </table>
+
+    <script>
+        /**
+         *
+         * Global Attributes needed for initialization
+         *
+         * Assign php arrays to JS arrays
+         *
+         */
+        var map;
+
+        // Plot the markers based on the fetched data
+        var latitude = <?php echo json_encode($latitude);?>;
+        var longitude = <?php echo json_encode($longitude);?>;
+        var name = <?php echo json_encode($name);?>;
+        var town = <?php echo json_encode($town);?>;
+        var county = <?php echo json_encode($county);?>;
+        var chargeDeviceStatus = <?php echo json_encode($chargeDeviceStatus);?>;
+
+
+        for (var i = 0; i < latitude.length; i++) {
+            addMarker(latitude[i], longitude[i], name[i], town[i], county[i], chargeDeviceStatus[i]);
+        }
+
+        /**
+         *
+         * Initialising with JS, google map, and passing API key below.
+         *
+         * then sets default marker for UK
+         *
+         * @param callback passing callback
+         */
+        function myMap(callback) {
+            var mapProp= {
+                center:new google.maps.LatLng(53.466056292346444, -2.1445376733893284),
+                zoom:6,
+                mapTypeId: google.maps.MapTypeId.HYBRID,
+            };
+            map = new google.maps.Map(document.getElementById("map"),mapProp);
+        }
+
+
+
+        /**
+         *
+         * Sets markers on Google map, will be called on button onClick()
+         *
+         * The markers will be looped based on the fetched data from Mongodb
+         *
+         */
+        // Plot the markers based on the fetched data
+        function addMarkers(_latitude, _longitude, _name, _town, _county, _chargeDeviceStatus) {
+            for (var i = 0; i < _latitude.length; i++) {
+                addMarker(_latitude[i], _longitude[i], _name[i], _town[i], _county[i], _chargeDeviceStatus[i]);
+            }
+        }
+        function addMarker(latitude, longitude, name, town, county, chargeDeviceStatus) {
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(latitude, longitude),
+                map: map
+            });
+
+            var infowindow = new google.maps.InfoWindow({
+                content: 'Name: ' + name + "<br />" + 'Latitude: ' + latitude + "<br />" + 'Longitude: ' + longitude +
+                    "<br />" + 'Town: ' + town + "<br />" + 'County: ' + county + "<br />" + 'Status: ' + chargeDeviceStatus
+            });
+
+            google.maps.event.addListener(marker, 'click', function() {
+                infowindow.open(map, marker);
+            });
+        }
+
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOQCuXjuSLJ5wiL-HdTG8mVNgH0aa6Ovc&callback=myMap"></script> <br>
+    <button type="button" onclick="addMarkers(latitude, longitude, name, town, county, chargeDeviceStatus)" class="btn btn-danger btn-block">Plot map</button>
+    <button type="submit" name="submitRefresh" class="btn btn-primary btn-block">Refresh table</button>
+
 </body>
 </html>
